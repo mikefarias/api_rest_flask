@@ -1,30 +1,30 @@
 from flask import Flask, jsonify, request
+from flask_restful import Resource, Api
 import json
 
 connect_ib = Flask(__name__)
+api = Api(connect_ib)
 
-#objetivo é pingar na API IB de 5 em 5 min para verificar status da bolsa
-#deve ser passado intervalo de tempo ?
-class Status:
-    @connect_ib.route("/ib/status", methods=['POST'])
-    def get_status_ib():
+class Status(Resource):
+    def post(self):
+        # será passado um intervalo de tempo para realizar ping na api IB? 
         response = {'status':'teste'}
-        return jsonify(response)       
+        return jsonify(response)
 
-
-class Trade:
-    @connect_ib.route("/ib/trade", methods=['POST'])
-    def get_trade_ib():
+class Trade(Resource):
+    def post(self):
         response = {'trade':'teste'}
-        return jsonify(response)       
+        return jsonify(response)
 
-
-class Price:
-    @connect_ib.route("/ib/price", methods=['POST'])
-    def get_price_ib():
+class Price(Resource):
+    def post(self):
         response = {'price':'teste'}
         return jsonify(response)
 
+
+api.add_resource(Status,'/ib/status')
+api.add_resource(Trade,'/ib/trade')
+api.add_resource(Price,'/ib/price')
 
 if __name__ == '__main__':
     connect_ib.run(debug=True)
